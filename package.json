@@ -12,6 +12,7 @@
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
+    "http": "^0.0.1-security",
     "mongoose": "^8.3.2",
     "node-nlp": "^4.27.0"
   }

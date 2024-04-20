@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 const PORT = process.env.PORT || 3000;
 async function start(){
     // await mongoose.connect(process.env.DB_CONN)
-
+    
     app.listen(PORT, () => {
         console.log(`Server started: http://localhost:${PORT}`)
     });

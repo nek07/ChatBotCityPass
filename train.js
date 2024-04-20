@@ -1,26 +1,53 @@
+const express = require('express');
 const { NlpManager } = require('node-nlp');
 
+const app = express();
+
 // Create a new instance of NLP Manager
-const manager = new NlpManager({ languages: ['en'] });
+const manager = new NlpManager({ languages: ['ru'] });
 
-// Add documents to the manager
-manager.addDocument('en', 'hello', 'greetings.hello');
-manager.addDocument('en', 'hi', 'greetings.hello');
-manager.addDocument('en', 'hey', 'greetings.hello');
+// // Добавляем документы в менеджер
+// manager.addDocument('ru', 'привет', 'greetings.hello');
+// manager.addDocument('ru', 'здравствуй', 'greetings.hello');
+// manager.addDocument('ru', 'приветствую', 'greetings.hello');
 
-manager.addDocument('en', 'bye', 'greetings.bye');
-manager.addDocument('en', 'goodbye', 'greetings.bye');
-manager.addDocument('en', 'see you later', 'greetings.bye');
+// manager.addDocument('ru', 'пока', 'greetings.bye');
+// manager.addDocument('ru', 'до свидания', 'greetings.bye');
+// manager.addDocument('ru', 'до встречи', 'greetings.bye');
 
-// Add answers to the manager
-manager.addAnswer('en', 'greetings.hello', 'Hello! How can I assist you today?');
-manager.addAnswer('en', 'greetings.bye', 'Goodbye! Have a great day!');
+// // Добавляем ответы в менеджер
+// manager.addAnswer('ru', 'greetings.hello', 'Привет! Чем могу помочь сегодня?');
+// manager.addAnswer('ru', 'greetings.hello', 'Здравствуй! Чем я могу быть полезен?');
+// manager.addAnswer('ru', 'greetings.hello', 'Привет! Чем могу помочь?');
 
-// Train the manager
-manager.train();
+// manager.addAnswer('ru', 'greetings.bye', 'Пока! Хорошего дня!');
+// manager.addAnswer('ru', 'greetings.bye', 'До свидания! Береги себя!');
+// manager.addAnswer('ru', 'greetings.bye', 'До встречи! Приятного дня!');
 
-// Process some messages
-(async () => {
-    const response = await manager.process('en', 'Hi there!');
-    console.log(response);
-})();
+// Обучаем менеджер
+// manager.train();
+const loadModel = async () => {
+    try {
+        await manager.load('model.nlp');
+        console.log('Model loaded successfully.');
+    } catch (error) {
+        console.error('Error loading model:', error);
+    }
+};
+
+// Load the model when the program starts
+loadModel();
+// Обрабатываем входящие запросы
+app.get('/', async (req, res) => {
+    // Обрабатываем сообщение, полученное от клиента
+    const response = await manager.process('ru', 'Привет!');
+
+    // Отправляем ответ обратно клиенту
+    res.send(response.answer);
+});
+
+// Запускаем сервер
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Сервер запущен на порту ${PORT}`);
+});
